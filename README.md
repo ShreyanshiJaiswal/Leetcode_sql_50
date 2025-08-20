@@ -1,6 +1,4 @@
-# Leetcode_sql_50
-
-# SQL50 Study Plan – My Progress Tracker 📘
+# SQL 50 Study Plan – My Progress Tracker 📘
 
 Hey! This repo is basically my journey through the [LeetCode SQL50](https://leetcode.com/studyplan/top-sql-50/) problems.  
 I started this because I didn’t just want to solve questions and forget them later. I wanted a place where I could track what I’ve done, keep my solutions in one place, and also write down how I thought about each problem in the simplest way possible.  
