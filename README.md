@@ -16,7 +16,7 @@ Instead of dumping everything in one huge file, I felt this way makes it cleaner
 ## Why I’m doing this
 Honestly, this is not just to “show progress.” I really want to get better at SQL, and the best way to learn (at least for me) is to write things down and explain them. If someone else checks this repo, I hope it also helps them see how I solved a problem without overcomplicating it.  
 
-It’s like my little notebook, just digital and public. By the time I’m done, I want this to be something I can look back at and say—yes, I worked through all of SQL50 step by step, and here’s exactly how I did it.  
+It’s like my little notebook, just digital and public. By the time I’m done, I want this to be something I can look back at and say yes, I worked through all of SQL50 step by step, and here’s exactly how I did it.  
 
 ## Progress
 I’ll keep adding to the folders as I go along. Slowly but surely, the full SQL50 will be here. Let’s see how it turns out :)
