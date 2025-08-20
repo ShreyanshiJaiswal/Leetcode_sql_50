@@ -22,3 +22,18 @@ WHERE low_fats = 'Y' AND recyclable = 'Y';
 - The `AND` ensures both conditions are satisfied together.
 - Final output → product IDs that meet both conditions.
 
+### [584. Find Customer Referee](https://leetcode.com/problems/find-customer-referee/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT name 
+FROM Customer 
+WHERE referee_id != 2 OR referee_id IS NULL;
+```
+## Thought Process
+- The table has customer details including who referred them (`referee_id`).
+- We want all customers **except the ones referred by customer 2**, and also include customers who were **not referred by anyone**.
+- Used `WHERE referee_id != 2` to exclude referrals from customer 2.
+- Used `OR referee_id IS NULL` to include customers without any referee.
+- Final output → names of all customers meeting these conditions.
+
+
