@@ -36,4 +36,44 @@ WHERE referee_id != 2 OR referee_id IS NULL;
 - Used `OR referee_id IS NULL` to include customers without any referee.
 - Final output → names of all customers meeting these conditions.
 
+### [595. Big Countries](https://leetcode.com/problems/big-countries/description/?envType=study-plan-v2&envId=top-sql-50)
 
+```sql
+SELECT name, population, area 
+FROM World 
+WHERE area >= 3000000 OR population >= 25000000;
+```
+## Thought Process
+- The problem wants countries considered "big".  
+- A country is big if **area ≥ 3,000,000** OR **population ≥ 25,000,000**.  
+- We only need to return `name`, `population`, and `area`.  
+- So we apply the condition with `OR` in the `WHERE` clause.
+  
+### [1148. Article Views I](https://leetcode.com/problems/article-views-i/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT DISTINCT(author_id) AS id 
+FROM Views 
+WHERE author_id = viewer_id 
+ORDER BY id ASC;
+```
+## Thought Process
+- The table `Views` contains `author_id` and `viewer_id`.  
+- We need to find users who **viewed their own articles** → condition is `author_id = viewer_id`.  
+- Since the same author may appear multiple times, we use `DISTINCT` to avoid duplicates.  
+- Rename `author_id` as `id` (per problem requirement).  
+- Finally, sort the result in ascending order of `id`.
+
+### [1683. Invalid Tweets](https://leetcode.com/problems/invalid-tweets/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT tweet_id 
+FROM Tweets 
+WHERE LENGTH(content) > 15;
+```
+## Thought Process
+- The table `Tweets` has `tweet_id` and `content`.  
+- A tweet is considered **invalid** if its content length exceeds 15 characters.  
+- We use the `LENGTH(content)` function to measure the number of characters.  
+- Apply the condition `> 15` to filter invalid tweets.  
+- Finally, select only the `tweet_id` of those tweets.
