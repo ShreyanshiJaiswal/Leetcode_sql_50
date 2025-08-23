@@ -124,3 +124,40 @@ GROUP BY DATE_FORMAT(trans_date, '%Y-%m'), country;
   4. `approved_total_amount` → approved transaction amounts only → `SUM(CASE WHEN state='approved' THEN amount ELSE 0 END)`.
 - Use `GROUP BY DATE_FORMAT(trans_date, '%Y-%m'), country` since aggregation is per month and per country.
 
+### [1174. Immediate Food Delivery II](https://leetcode.com/problems/immediate-food-delivery-ii/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+WITH FirstOrders AS (
+    SELECT 
+        customer_id,
+        MIN(order_date) AS first_order_date
+    FROM Delivery
+    GROUP BY customer_id
+)
+SELECT 
+    ROUND(
+        100.0 * SUM(CASE 
+                        WHEN d.order_date = d.customer_pref_delivery_date 
+                        THEN 1 
+                        ELSE 0 
+                    END) / COUNT(*), 
+        2
+    ) AS immediate_percentage
+FROM Delivery d
+JOIN FirstOrders f
+    ON d.customer_id = f.customer_id
+   AND d.order_date = f.first_order_date;
+```
+### Thought Process
+- First, the problem is asking about the **first order of each customer** and whether that first order was delivered immediately (meaning `order_date = customer_pref_delivery_date`).
+- So step 1 is: find the **first order date** for each customer. We can do that with `MIN(order_date)` grouped by `customer_id`.
+- Step 2: once we know the first order date, we need to check if that specific order was delivered immediately.
+- For that, we join the first-order table with the main `Delivery` table on both `customer_id` and `order_date`.
+- Step 3: after the join, we count how many first orders were delivered immediately and divide it by total first orders.
+- Finally, we multiply by 100 to make it a percentage and round it to 2 decimal places.
+
+So the main idea is:
+1. Get each customer’s first order date.  
+2. Join it back with the delivery table.  
+3. Check if the delivery was immediate.  
+4. Calculate percentage = (immediate first orders ÷ all first orders) × 100. 
