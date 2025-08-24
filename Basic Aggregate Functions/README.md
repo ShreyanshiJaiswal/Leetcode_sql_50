@@ -161,3 +161,32 @@ So the main idea is:
 2. Join it back with the delivery table.  
 3. Check if the delivery was immediate.  
 4. Calculate percentage = (immediate first orders ÷ all first orders) × 100. 
+
+## [550. Game Play Analysis IV](https://leetcode.com/problems/game-play-analysis-iv/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+WITH FirstLogins AS (
+  SELECT
+    player_id,
+    MIN(event_date) AS first_login_date
+  FROM Activity
+  GROUP BY player_id
+)
+SELECT
+  ROUND(
+    SUM(CASE WHEN Activity.player_id IS NOT NULL THEN 1 ELSE 0 END) * 1.0
+    / COUNT(*),
+    2
+  ) AS fraction
+FROM FirstLogins
+LEFT JOIN Activity
+  ON Activity.player_id = FirstLogins.player_id
+ AND Activity.event_date = DATE_ADD(FirstLogins.first_login_date, INTERVAL 1 DAY);
+```
+### Thought Process
+- First, we need to know when each player logged in for the first time. So, we take the minimum `event_date` for every player. That will be their first login date.  
+- Now, we want to check whether that same player also logged in **exactly the next day** after their first login.  
+- To do that, we join the `Activity` table with the result of first logins, matching the same player, but with `event_date = first_login_date + 1`.  
+- After joining, if a player has a record in the join, that means they came back the very next day.  
+- Finally, we calculate the fraction = (number of players who logged in next day) ÷ (total players).  
+- Round this result to 2 decimal places. 
