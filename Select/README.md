@@ -1,7 +1,7 @@
 # Select Questions
 
 This file has all the problems from the **Select** section of SQL50.  
-Each question has a link, my SQL solution, and a short thought process written in bullet points for clarity.
+Each question has a link, my SQL solution, and a short thought process.
 
 ---
 
