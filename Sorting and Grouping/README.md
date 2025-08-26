@@ -33,3 +33,29 @@ GROUP BY activity_date;
 - We only consider dates between `'2019-06-28'` and `'2019-07-27'`.  
 - `GROUP BY activity_date` ensures results are calculated **per day**.  
 - Aliased `activity_date` as `day` for clarity in output.
+
+### [1070. Product Sales Analysis III](https://leetcode.com/problems/product-sales-analysis-iii/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT 
+    s.product_id, 
+    sub.first_year, 
+    s.quantity, 
+    s.price 
+FROM Sales s
+JOIN (
+    SELECT 
+        product_id, 
+        MIN(year) AS first_year 
+    FROM Sales 
+    GROUP BY product_id
+) AS sub
+ON s.product_id = sub.product_id 
+AND s.year = sub.first_year;
+```
+## Thought Process
+- The goal is to find **each product’s first year of sale** along with its sales details.  
+- First, find the **minimum year per product** using `MIN(year)` grouped by `product_id`.  
+- Use this subquery as `sub` to identify the first year for each product.  
+- Join the subquery with the main `Sales` table on both `product_id` and `year = first_year` to fetch the correct rows.  
+- Select required columns: `product_id`, `first_year`, `quantity`, and `price`.
