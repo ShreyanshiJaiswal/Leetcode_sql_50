@@ -59,3 +59,18 @@ AND s.year = sub.first_year;
 - Use this subquery as `sub` to identify the first year for each product.  
 - Join the subquery with the main `Sales` table on both `product_id` and `year = first_year` to fetch the correct rows.  
 - Select required columns: `product_id`, `first_year`, `quantity`, and `price`.
+
+### [596. Classes With at Least 5 Students](https://leetcode.com/problems/classes-with-at-least-5-students/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT class 
+FROM Courses 
+GROUP BY class
+HAVING COUNT(DISTINCT student) >= 5;
+```
+## Thought Process
+- We need to find classes that have **at least 5 distinct students**.  
+- `GROUP BY class` ensures we evaluate students per class.  
+- `COUNT(DISTINCT student)` is used because the same student may appear multiple times.  
+- `HAVING` is used (not `WHERE`) because filtering happens **after grouping**.  
+- Finally, select only those classes where the count is `>= 5`.
