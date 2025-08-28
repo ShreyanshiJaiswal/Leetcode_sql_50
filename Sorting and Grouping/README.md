@@ -74,3 +74,19 @@ HAVING COUNT(DISTINCT student) >= 5;
 - `COUNT(DISTINCT student)` is used because the same student may appear multiple times.  
 - `HAVING` is used (not `WHERE`) because filtering happens **after grouping**.  
 - Finally, select only those classes where the count is `>= 5`.
+
+### [1729. Find Followers Count](https://leetcode.com/problems/find-followers-count/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT user_id, 
+       COUNT(DISTINCT follower_id) AS followers_count 
+FROM Followers
+GROUP BY user_id 
+ORDER BY user_id ASC;
+```
+## Thought Process
+- The task is to find how many **distinct followers** each user has.  
+- `GROUP BY user_id` ensures aggregation per user.  
+- `COUNT(DISTINCT follower_id)` avoids double-counting if a follower follows the same user multiple times.  
+- We rename the column as `followers_count` for clarity.  
+- `ORDER BY user_id ASC` ensures results are sorted by user ID.
