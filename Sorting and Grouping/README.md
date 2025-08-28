@@ -90,3 +90,20 @@ ORDER BY user_id ASC;
 - `COUNT(DISTINCT follower_id)` avoids double-counting if a follower follows the same user multiple times.  
 - We rename the column as `followers_count` for clarity.  
 - `ORDER BY user_id ASC` ensures results are sorted by user ID.
+
+### [619. Biggest Single Number](https://leetcode.com/problems/biggest-single-number/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT MAX(num) AS num
+FROM (
+    SELECT num
+    FROM MyNumbers
+    GROUP BY num
+    HAVING COUNT(num) = 1
+) AS t;
+```
+## Thought Process
+- We need the **largest number that appears only once**.  
+- Step 1: `GROUP BY num HAVING COUNT(num) = 1` filters numbers that appear exactly once.  
+- Step 2: Wrap this in a subquery, then use `MAX(num)` to find the biggest among them.  
+- If no number occurs exactly once, the result will be `NULL` (as required by the problem).  
