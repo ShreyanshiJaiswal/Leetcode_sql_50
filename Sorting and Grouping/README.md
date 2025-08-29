@@ -107,3 +107,21 @@ FROM (
 - Step 1: `GROUP BY num HAVING COUNT(num) = 1` filters numbers that appear exactly once.  
 - Step 2: Wrap this in a subquery, then use `MAX(num)` to find the biggest among them.  
 - If no number occurs exactly once, the result will be `NULL` (as required by the problem).  
+
+### [1045. Customers Who Bought All Products](https://leetcode.com/problems/customers-who-bought-all-products/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT customer_id
+FROM Customer c
+GROUP BY customer_id
+HAVING COUNT(DISTINCT c.product_key) = (
+    SELECT COUNT(*) FROM Product
+);
+```
+## Thought Process
+- Goal: Find customers who purchased **every product** listed in `Product`.  
+- Step 1: For each `customer_id`, count distinct products purchased → `COUNT(DISTINCT product_key)`.  
+- Step 2: Compare this count with the **total number of products** in the `Product` table → `SELECT COUNT(*) FROM Product`.  
+- Step 3: Only return those customers where both counts match (meaning they bought all products).
+  
+📌 If a product is not bought by a customer, their distinct count will be less → they won’t be included.
