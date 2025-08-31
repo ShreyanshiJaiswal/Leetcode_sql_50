@@ -53,3 +53,23 @@ WHERE primary_flag = 'Y'
   - First, select rows where `primary_flag = 'Y'`.  
   - Next, add employees who belong to exactly one department using `GROUP BY employee_id HAVING COUNT(department_id) = 1`.  
 - This ensures we capture both single-department employees and multi-department employees with a defined primary.  
+
+### [610. Triangle Judgement](https://leetcode.com/problems/triangle-judgement/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT 
+    x, y, z,
+    CASE 
+        WHEN x + y > z AND x + z > y AND y + z > x 
+        THEN 'Yes'
+        ELSE 'No'
+    END AS triangle
+FROM Triangle;
+```
+## Thought Process
+- Goal: Check if three sides can form a valid triangle.  
+- Rule: A triangle is valid only if the sum of any two sides is strictly greater than the third side.  
+- Translate this into SQL with a `CASE` statement:
+  - `WHEN x + y > z AND x + z > y AND y + z > x THEN 'Yes'`
+  - Otherwise `'No'`.  
+- Simply return the sides `x, y, z` along with the computed result as `triangle`.  
