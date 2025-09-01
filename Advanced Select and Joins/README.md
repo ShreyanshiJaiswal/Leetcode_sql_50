@@ -73,3 +73,21 @@ FROM Triangle;
   - `WHEN x + y > z AND x + z > y AND y + z > x THEN 'Yes'`
   - Otherwise `'No'`.  
 - Simply return the sides `x, y, z` along with the computed result as `triangle`.  
+
+### [180. Consecutive Numbers](https://leetcode.com/problems/consecutive-numbers/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT DISTINCT t1.num AS ConsecutiveNums
+FROM Logs t1
+JOIN Logs t2 ON t1.id = t2.id - 1
+JOIN Logs t3 ON t1.id = t3.id - 2
+WHERE t1.num = t2.num 
+  AND t2.num = t3.num;
+```
+## Thought Process
+- Goal: Find numbers that appear consecutively **at least 3 times** in the `Logs` table.  
+- Approach:
+  - Compare each row (`t1`) with the next row (`t2`) and the row after that (`t3`), based on `id`.  
+  - Condition: If `t1.num = t2.num = t3.num`, then that number appears 3 times in a row.  
+  - Use `DISTINCT` to avoid duplicates in the result.  
+- Output: Column `ConsecutiveNums` with all such numbers.  
