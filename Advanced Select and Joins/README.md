@@ -95,19 +95,37 @@ WHERE t1.num = t2.num
 ### [1164. Product Price at a Given Date](https://leetcode.com/problems/product-price-at-a-given-date/description/?envType=study-plan-v2&envId=top-sql-50)
 
 ```sql
-SELECT product_id,
-       CASE 
-         WHEN MAX(CASE WHEN change_date <= '2019-08-16' THEN new_price END) IS NOT NULL
-         THEN MAX(CASE WHEN change_date <= '2019-08-16' THEN new_price END)
-         ELSE 10
-       END AS price
-FROM Products
-GROUP BY product_id;
+SELECT p.product_id,
+       COALESCE(latest.new_price, 10) AS price
+FROM (SELECT DISTINCT product_id FROM Products) p
+LEFT JOIN (
+    SELECT product_id, new_price
+    FROM Products
+    WHERE (product_id, change_date) IN (
+        SELECT product_id, MAX(change_date)
+        FROM Products
+        WHERE change_date <= '2019-08-16'
+        GROUP BY product_id
+    )
+) latest
+ON p.product_id = latest.product_id;
 ```
 ## Thought Process
-- Need the price of each product **on 2019-08-16**.
-- For each product, find the latest price change that happened **on or before** 2019-08-16.
-- `CASE WHEN change_date <= '2019-08-16' THEN new_price END` keeps only valid prices.
-- Wrapping that in `MAX()` picks the most recent valid price for each product.
-- If there is no valid price before that date, return the default price `10`.
-- Group by `product_id` so we do this per product.
+1. **Initial Condition**
+   - Every product starts with a default price = 10.
+
+2. **Requirement**
+   - If a product has at least one price change **on or before** `2019-08-16`, take the **latest change** (closest to that date).
+   - If no change exists before that date → fallback to default price = 10.
+
+3. **Step-by-step reasoning**
+   - Extract all product_id’s (ensures we cover those with no price changes too).
+   - For each product:
+     - Find the `MAX(change_date)` ≤ `2019-08-16`.
+     - Use that date to fetch the corresponding `new_price`.
+   - If a product has no matching record, return `10` as default.
+   - This requires:
+     - Subquery with `MAX(change_date)` per product.
+     - Join it back to Products to get the `new_price`.
+     - Wrap with `COALESCE` to handle missing prices.
+
