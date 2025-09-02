@@ -91,3 +91,23 @@ WHERE t1.num = t2.num
   - Condition: If `t1.num = t2.num = t3.num`, then that number appears 3 times in a row.  
   - Use `DISTINCT` to avoid duplicates in the result.  
 - Output: Column `ConsecutiveNums` with all such numbers.  
+
+### [1164. Product Price at a Given Date](https://leetcode.com/problems/product-price-at-a-given-date/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT product_id,
+       CASE 
+         WHEN MAX(CASE WHEN change_date <= '2019-08-16' THEN new_price END) IS NOT NULL
+         THEN MAX(CASE WHEN change_date <= '2019-08-16' THEN new_price END)
+         ELSE 10
+       END AS price
+FROM Products
+GROUP BY product_id;
+```
+## Thought Process
+- Need the price of each product **on 2019-08-16**.
+- For each product, find the latest price change that happened **on or before** 2019-08-16.
+- `CASE WHEN change_date <= '2019-08-16' THEN new_price END` keeps only valid prices.
+- Wrapping that in `MAX()` picks the most recent valid price for each product.
+- If there is no valid price before that date, return the default price `10`.
+- Group by `product_id` so we do this per product.
