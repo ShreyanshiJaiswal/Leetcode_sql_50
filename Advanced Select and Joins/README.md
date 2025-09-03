@@ -144,7 +144,7 @@ WHERE running_weight <= 1000
 ORDER BY turn DESC
 LIMIT 1;
 ```
-## Thought Process — 1204. Last Person to Fit in the Bus
+## Thought Process
 
 1. **What we need**
    - People are in a queue with `turn` and `weight`.
