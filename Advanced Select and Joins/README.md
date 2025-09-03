@@ -129,3 +129,38 @@ ON p.product_id = latest.product_id;
      - Join it back to Products to get the `new_price`.
      - Wrap with `COALESCE` to handle missing prices.
 
+### [1204. Last Person to Fit in the Bus](https://leetcode.com/problems/last-person-to-fit-in-the-bus/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+WITH cte AS (
+    SELECT person_name, 
+           turn, 
+           SUM(weight) OVER(ORDER BY turn ASC) AS running_weight
+    FROM Queue
+)
+SELECT person_name
+FROM cte
+WHERE running_weight <= 1000
+ORDER BY turn DESC
+LIMIT 1;
+```
+## Thought Process — 1204. Last Person to Fit in the Bus
+
+1. **What we need**
+   - People are in a queue with `turn` and `weight`.
+   - The bus can carry at most **1000** total weight.
+   - We want the **last person** who can still board without the total going over 1000.
+
+2. **How to think about it**
+   - People board in order of `turn`, so keep a **running total** of weight as we move through the queue.
+   - If the running total after someone boards is **≤ 1000**, they fit; otherwise they don’t.
+
+3. **Plan**
+   - Use a window function: `SUM(weight) OVER (ORDER BY turn)` to compute the running total (`running_weight`) for each person.
+   - Keep only rows where `running_weight ≤ 1000` (these people fit).
+   - From those, pick the one with the **largest `turn`** — that’s the **last person** who fits.
+
+4. **Why this works**
+   - The running sum mirrors real boarding order.
+   - Filtering by `≤ 1000` keeps only valid boarders.
+   - Taking the highest `turn` among valid rows gives the final person who still fits.
