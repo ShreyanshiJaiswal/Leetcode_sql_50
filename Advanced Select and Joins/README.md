@@ -164,3 +164,45 @@ LIMIT 1;
    - The running sum mirrors real boarding order.
    - Filtering by `≤ 1000` keeps only valid boarders.
    - Taking the highest `turn` among valid rows gives the final person who still fits.
+
+### [1907. Count Salary Categories](https://leetcode.com/problems/count-salary-categories/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT 'Low Salary' AS category, COUNT(*) AS accounts_count
+FROM Accounts
+WHERE income < 20000
+
+UNION ALL
+
+SELECT 'Average Salary' AS category, COUNT(*) AS accounts_count
+FROM Accounts
+WHERE income BETWEEN 20000 AND 50000
+
+UNION ALL
+
+SELECT 'High Salary' AS category, COUNT(*) AS accounts_count
+FROM Accounts
+WHERE income > 50000;
+```
+## Thought Process — 1907. Count Salary Categories
+
+1. **Goal**  
+   - Group accounts into three salary categories: Low, Average, High.  
+   - Count how many accounts fall into each category.
+
+2. **How to do it**  
+   - Use `WHERE` to filter accounts for each category:  
+     - Low: income < 20000  
+     - Average: income BETWEEN 20000 AND 50000  
+     - High: income > 50000  
+   - Use `COUNT(*)` to get the number of accounts in each group.
+
+3. **Combine results**  
+   - Use `UNION ALL` to merge all three category counts into a single result set.  
+   - Add a string label (`'Low Salary'`, etc.) so the output clearly shows the category name.
+
+4. **Why this works**  
+   - Each SELECT handles one category.  
+   - `UNION ALL` preserves all rows.  
+   - The output shows category + count in a simple, readable format.
+
