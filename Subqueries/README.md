@@ -45,3 +45,52 @@ ORDER BY id;
 - If last seat is odd with no pair, keep the same student.  
 - Use `CASE` and small subqueries to pick the neighbor’s student when swapping.  
 - Order by `id` so output follows seat order.
+
+### [1341. Movie Rating](https://leetcode.com/problems/movie-rating/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+(
+    SELECT u.name AS results
+    FROM Users u
+    JOIN (
+        SELECT user_id, COUNT(*) AS rating_count 
+        FROM MovieRating 
+        GROUP BY user_id
+    ) r  
+    ON u.user_id = r.user_id 
+    ORDER BY r.rating_count DESC, u.name ASC
+    LIMIT 1
+)
+UNION ALL
+(
+    SELECT m.title AS results
+    FROM Movies m 
+    JOIN (
+        SELECT movie_id, AVG(rating) AS avg_rating 
+        FROM MovieRating
+        WHERE created_at >= '2020-02-01'
+          AND created_at < '2020-03-01' 
+        GROUP BY movie_id
+    ) r 
+    ON m.movie_id = r.movie_id
+    ORDER BY r.avg_rating DESC, m.title ASC
+    LIMIT 1
+);
+```
+## Thought Process
+- The question asks for **two results**:  
+  1. The user who gave the most ratings.  
+  2. The movie with the highest average rating in Feb 2020.  
+
+- First part:  
+  - Count ratings per user using `GROUP BY user_id`.  
+  - Order by rating count (desc) and username (asc) to break ties.  
+  - Limit to top 1 user.  
+
+- Second part:  
+  - Filter ratings only in Feb 2020.  
+  - Calculate average rating per movie.  
+  - Order by average rating (desc), then movie title (asc).  
+  - Limit to top 1 movie.  
+
+- Combine both queries with `UNION ALL` to show the two results together in one column named `results`.  
