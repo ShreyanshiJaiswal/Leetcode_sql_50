@@ -141,3 +141,35 @@ ORDER BY visited_on;
 - Step 4:  
   - Output columns: `visited_on`, total amount in 7 days, and average.  
   - Order by `visited_on` for chronological reporting.  
+
+### [602. Friend Requests II: Who Has the Most Friends](https://leetcode.com/problems/friend-requests-ii-who-has-the-most-friends/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT person AS id, COUNT(DISTINCT friend) AS num
+FROM (
+    SELECT requester_id AS person, accepter_id AS friend
+    FROM RequestAccepted
+    UNION ALL
+    SELECT accepter_id AS person, requester_id AS friend
+    FROM RequestAccepted
+) t
+GROUP BY person
+ORDER BY num DESC
+LIMIT 1;
+```
+## Thought Process
+- We need to find the person with the **most friends**.  
+
+- Step 1:  
+  - Each row in `RequestAccepted` shows a friendship.  
+  - Friendship is **bi-directional**, so we consider both `(requester, accepter)` and `(accepter, requester)` using `UNION ALL`.  
+
+- Step 2:  
+  - Count **distinct friends** for each person using `COUNT(DISTINCT friend)`.  
+
+- Step 3:  
+  - Group by `person` to aggregate their total friends.  
+
+- Step 4:  
+  - Order by `num DESC` to get the person with the most friends on top.  
+  - Limit to 1 since we only need the top friend count.  
