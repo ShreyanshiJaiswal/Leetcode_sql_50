@@ -94,3 +94,50 @@ UNION ALL
   - Limit to top 1 movie.  
 
 - Combine both queries with `UNION ALL` to show the two results together in one column named `results`.  
+
+### [1321. Restaurant Growth](https://leetcode.com/problems/restaurant-growth/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT visited_on, amount_7d AS amount, average_amount
+FROM (
+    SELECT 
+        visited_on,
+        SUM(amount) OVER (
+            ORDER BY visited_on
+            ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+        ) AS amount_7d,
+        ROUND(
+            AVG(amount) OVER (
+                ORDER BY visited_on
+                ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+            ), 2
+        ) AS average_amount,
+        ROW_NUMBER() OVER (ORDER BY visited_on) AS row_num
+    FROM (
+        SELECT visited_on, SUM(amount) AS amount
+        FROM Customer
+        GROUP BY visited_on
+    ) daily
+) t
+WHERE row_num >= 7
+ORDER BY visited_on;
+```
+## Thought Process
+- We need to calculate the **7-day rolling sum and average** of customer spending.  
+
+- Step 1:  
+  - First, aggregate the raw `Customer` table by `visited_on` to get daily totals.  
+
+- Step 2:  
+  - Use window functions:  
+    - `SUM(amount) OVER (ROWS BETWEEN 6 PRECEDING AND CURRENT ROW)` → gives the rolling 7-day total.  
+    - `AVG(amount) OVER (ROWS BETWEEN 6 PRECEDING AND CURRENT ROW)` → gives the rolling 7-day average.  
+  - Round the average to 2 decimals.  
+
+- Step 3:  
+  - Assign row numbers ordered by `visited_on`.  
+  - Exclude the first 6 rows (`WHERE row_num >= 7`) since a full 7-day window is required.  
+
+- Step 4:  
+  - Output columns: `visited_on`, total amount in 7 days, and average.  
+  - Order by `visited_on` for chronological reporting.  
