@@ -173,3 +173,40 @@ LIMIT 1;
 - Step 4:  
   - Order by `num DESC` to get the person with the most friends on top.  
   - Limit to 1 since we only need the top friend count.  
+
+### [585. Investments in 2016](https://leetcode.com/problems/investments-in-2016/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT 
+    ROUND(SUM(tiv_2016), 2) AS tiv_2016
+FROM Insurance
+WHERE tiv_2015 IN (
+    SELECT tiv_2015
+    FROM Insurance
+    GROUP BY tiv_2015
+    HAVING COUNT(*) > 1
+)
+AND (lat, lon) IN (
+    SELECT lat, lon
+    FROM Insurance
+    GROUP BY lat, lon
+    HAVING COUNT(*) = 1
+);
+```
+## Thought Process
+- We need the total `tiv_2016` for certain policies under specific conditions.  
+
+- Step 1:  
+  - Policy’s `tiv_2015` should appear more than once across the table.  
+  - Use `GROUP BY tiv_2015 HAVING COUNT(*) > 1` to find those values.  
+
+- Step 2:  
+  - The location `(lat, lon)` must be **unique** (only one record at that location).  
+  - Use `GROUP BY lat, lon HAVING COUNT(*) = 1` for that condition.  
+
+- Step 3:  
+  - Filter the main table with both conditions using `WHERE`.  
+
+- Step 4:  
+  - Sum the `tiv_2016` values of the qualifying records.  
+  - Round to 2 decimal places as required.  
