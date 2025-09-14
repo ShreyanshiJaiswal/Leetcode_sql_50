@@ -210,3 +210,32 @@ AND (lat, lon) IN (
 - Step 4:  
   - Sum the `tiv_2016` values of the qualifying records.  
   - Round to 2 decimal places as required.  
+
+### [185. Department Top Three Salaries](https://leetcode.com/problems/department-top-three-salaries/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT d.name AS Department,
+       e.name AS Employee,
+       e.salary AS Salary
+FROM (
+    SELECT id,
+           name,
+           salary,
+           departmentId,
+           DENSE_RANK() OVER (PARTITION BY departmentId ORDER BY salary DESC) AS rnk
+    FROM Employee
+) e
+JOIN Department d
+  ON e.departmentId = d.id
+WHERE e.rnk <= 3;
+```
+## Thought Process
+- The task is to find the **top 3 salaries per department**.  
+## Thought Process
+- We need the top 3 salaries for each department, so ranking salaries within each department is the key.  
+- Using `DENSE_RANK()` makes sense because it avoids skipping ranks when salaries tie. For example, if two people share the same highest salary, they both get rank 1, and the next person gets rank 2.  
+- Partitioning by `departmentId` ensures ranking happens separately for each department, not across all employees.  
+- Ordering by `salary DESC` makes higher salaries get smaller rank numbers (1 is highest).  
+- After ranking, we filter to only those rows where the rank is `<= 3`, so we only keep the top 3 salaries per department.  
+- Since the Employee table has only department IDs, we need to join it with the Department table to fetch department names.  
+- Finally, the query selects department name, employee name, and their salary for clear output.  
