@@ -231,7 +231,6 @@ WHERE e.rnk <= 3;
 ```
 ## Thought Process
 - The task is to find the **top 3 salaries per department**.  
-## Thought Process
 - We need the top 3 salaries for each department, so ranking salaries within each department is the key.  
 - Using `DENSE_RANK()` makes sense because it avoids skipping ranks when salaries tie. For example, if two people share the same highest salary, they both get rank 1, and the next person gets rank 2.  
 - Partitioning by `departmentId` ensures ranking happens separately for each department, not across all employees.  
