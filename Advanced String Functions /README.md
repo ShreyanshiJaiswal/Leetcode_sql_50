@@ -21,3 +21,18 @@ ORDER BY user_id;
 - For the remaining characters, use `SUBSTRING(name, 2)` and convert them to lowercase with `LOWER()`.  
 - Combine both parts using `CONCAT()` to form the corrected name.  
 - Finally, order the output by `user_id` for a consistent result.  
+
+### [1527. Patients With a Condition](https://leetcode.com/problems/patients-with-a-condition/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT patient_id, patient_name, conditions 
+FROM Patients
+WHERE conditions LIKE 'DIAB1%' 
+   OR conditions LIKE '% DIAB1%';
+```
+## Thought Process
+- We need to find all patients whose conditions include `"DIAB1"`.  
+- Sometimes `"DIAB1"` can appear at the very beginning of the string, so we check with `LIKE 'DIAB1%'`.  
+- Other times, it can appear after a space (not at the start), so we also check with `LIKE '% DIAB1%'`.  
+- Using `OR` ensures we capture both cases.  
+- Finally, select the required columns: `patient_id`, `patient_name`, and `conditions`.  
