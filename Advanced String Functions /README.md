@@ -36,3 +36,24 @@ WHERE conditions LIKE 'DIAB1%'
 - Other times, it can appear after a space (not at the start), so we also check with `LIKE '% DIAB1%'`.  
 - Using `OR` ensures we capture both cases.  
 - Finally, select the required columns: `patient_id`, `patient_name`, and `conditions`.  
+
+### [196. Delete Duplicate Emails](https://leetcode.com/problems/delete-duplicate-emails/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+DELETE FROM Person
+WHERE id NOT IN (
+    SELECT id
+    FROM (
+        SELECT MIN(id) AS id
+        FROM Person
+        GROUP BY email
+    ) AS t
+);
+```
+## Thought Process
+- The goal is to **remove duplicate emails** but keep only one record for each email.  
+- Use `GROUP BY email` to group records with the same email.  
+- Within each group, keep the record with the smallest `id` using `MIN(id)`.  
+- Subquery returns only these valid `id`s to keep.  
+- Delete all rows in `Person` where `id` is **not in** this list.  
+- Wrapping the grouped subquery in another derived table (`AS t`) avoids MySQL’s restriction on modifying and selecting from the same table simultaneously.  
