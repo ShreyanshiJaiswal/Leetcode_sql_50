@@ -57,3 +57,21 @@ WHERE id NOT IN (
 - Subquery returns only these valid `id`s to keep.  
 - Delete all rows in `Person` where `id` is **not in** this list.  
 - Wrapping the grouped subquery in another derived table (`AS t`) avoids MySQL’s restriction on modifying and selecting from the same table simultaneously.  
+
+### [176. Second Highest Salary](https://leetcode.com/problems/second-highest-salary/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT (
+    SELECT DISTINCT salary
+    FROM Employee
+    ORDER BY salary DESC
+    LIMIT 1 OFFSET 1
+) AS SecondHighestSalary;
+```
+## Thought Process
+- The task is to return the **second highest salary** from the `Employee` table.  
+- `DISTINCT salary` removes duplicates, ensuring unique salary values.  
+- `ORDER BY salary DESC` arranges salaries from highest to lowest.  
+- `LIMIT 1 OFFSET 1` skips the highest salary (offset 1) and fetches the next one (limit 1).  
+- Wrapping the subquery in the outer `SELECT` allows the result to be returned as `SecondHighestSalary`.  
+- If no second highest salary exists, the query naturally returns `NULL`.  
