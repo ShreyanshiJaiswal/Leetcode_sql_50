@@ -75,3 +75,22 @@ SELECT (
 - `LIMIT 1 OFFSET 1` skips the highest salary (offset 1) and fetches the next one (limit 1).  
 - Wrapping the subquery in the outer `SELECT` allows the result to be returned as `SecondHighestSalary`.  
 - If no second highest salary exists, the query naturally returns `NULL`.  
+
+### [1484. Group Sold Products By The Date](https://leetcode.com/problems/group-sold-products-by-the-date/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT 
+    sell_date,
+    COUNT(DISTINCT product) AS num_sold,
+    GROUP_CONCAT(DISTINCT product ORDER BY product SEPARATOR ',') AS products
+FROM Activities
+GROUP BY sell_date
+ORDER BY sell_date;
+```
+## Thought Process
+- The goal is to group products sold on the same date.  
+- Use `GROUP BY sell_date` to aggregate data for each date.  
+- `COUNT(DISTINCT product)` gives the number of unique products sold on that day.  
+- `GROUP_CONCAT(DISTINCT product ORDER BY product SEPARATOR ',')` lists all unique products, ordered alphabetically, and joined into a single comma-separated string.  
+- `ORDER BY sell_date` ensures the results are shown in chronological order.
+  
