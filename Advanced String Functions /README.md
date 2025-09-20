@@ -93,4 +93,30 @@ ORDER BY sell_date;
 - `COUNT(DISTINCT product)` gives the number of unique products sold on that day.  
 - `GROUP_CONCAT(DISTINCT product ORDER BY product SEPARATOR ',')` lists all unique products, ordered alphabetically, and joined into a single comma-separated string.  
 - `ORDER BY sell_date` ensures the results are shown in chronological order.
-  
+
+### [1327. List the Products Ordered in a Period](https://leetcode.com/problems/list-the-products-ordered-in-a-period/description/?envType=study-plan-v2&envId=top-sql-50)
+
+```sql
+SELECT 
+    p.product_name,
+    r.total_units AS unit
+FROM 
+    (SELECT 
+         product_id, 
+         SUM(unit) AS total_units
+     FROM Orders
+     WHERE order_date BETWEEN '2020-02-01' AND '2020-02-29'
+     GROUP BY product_id
+     HAVING SUM(unit) >= 100
+    ) r
+JOIN Products p 
+ON r.product_id = p.product_id;
+```
+## Thought Process
+- We need to find products with significant orders in February 2020.  
+- Filter `Orders` table for dates between '2020-02-01' and '2020-02-29'.  
+- Group by `product_id` and sum the `unit` to get total units per product.  
+- Keep only products where total units >= 100 using `HAVING`.  
+- Join with `Products` table to get the `product_name`.  
+- Select product name and total units for the final output.  
+
